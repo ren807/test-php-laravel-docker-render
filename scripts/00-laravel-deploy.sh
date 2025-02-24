@@ -16,11 +16,6 @@ php artisan route:cache
 echo "Running migrations..."
 php artisan migrate --force
 
-# Node.jsインストール
-echo "Installing Node.js..."
-curl -sL https://deb.nodesource.com/setup_16.x | bash -
-apt-get install -y nodejs
-
 # npm依存関係インストール
 echo "Installing npm dependencies..."
 cd /var/www/html
