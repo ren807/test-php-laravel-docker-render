@@ -17,4 +17,15 @@ ENV LOG_CHANNEL stderr
 # Allow composer to run as root
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
+# 必要なパッケージのインストール
+RUN apk update && apk add --no-cache bash curl
+
+# Node.jsのインストール (バイナリ版)
+RUN curl -fsSL https://nodejs.org/dist/v16.20.2/node-v16.20.2-linux-x64.tar.xz -o /tmp/node-v16.20.2-linux-x64.tar.xz && \
+    tar -xJf /tmp/node-v16.20.2-linux-x64.tar.xz -C /usr/local --strip-components=1 && \
+    rm /tmp/node-v16.20.2-linux-x64.tar.xz
+
+# Node.jsのバイナリがパスに含まれていることを確認
+ENV PATH=/usr/local/bin:$PATH
+
 CMD ["/start.sh"]
