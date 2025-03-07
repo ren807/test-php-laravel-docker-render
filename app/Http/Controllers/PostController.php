@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Post;
+use App\Services\PostService;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    public $post;
+    private $post;
 
-    public function __construct()
+    public function __construct(PostService $post_service)
     {
-        $this->post = new Post(); // 投稿モデルをインスタンス化
+        $this->post = $post_service;
     }
 
     public function index()
