@@ -16,7 +16,7 @@ class PostController extends Controller
 
     public function index()
     {
-        $data = $this->post->get_posts_data();
+        $data = $this->post->getAverageRating();
         dd($data);
     }
 }
