@@ -16,7 +16,9 @@ class PostController extends Controller
 
     public function index()
     {
-        $data = $this->post->getAverageRating();
-        dd($data);
+        $posts = $this->post->getShopInfoWithTags();
+        // dd($posts);
+
+        return View('posts.index', ['posts' => $posts]);
     }
 }
