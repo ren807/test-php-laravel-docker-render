@@ -16,8 +16,16 @@ class PostController extends Controller
 
     public function index()
     {
-        $posts = $this->post->getShopInfoWithTags();
-        // dd($posts);
+        $id = 1;
+        $posts = [];
+
+        $shopDetails = $this->post->getShopDetails();
+        $Favorites   = $this->post->getFavorites($id);
+
+        $posts = [
+            'shopDetails' => $shopDetails,
+            'Favorites'   => $Favorites
+        ];
 
         return View('posts.index', ['posts' => $posts]);
     }

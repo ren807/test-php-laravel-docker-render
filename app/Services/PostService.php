@@ -5,15 +5,16 @@ use Illuminate\Support\Facades\DB;
 
 class PostService
 {
+
     /**
-     * 店舗情報にタグ名を追加する
+     * 店舗情報を取得する
      * @return array<int, object>
      */
-    public function getShopInfoWithTags(): array
+    public function getShopDetails(): array
     {
         // 店舗情報を取得する
         $shopInfo = $this->getShopInfo();
-
+        
         // タグを全種類取得する
         $tags = $this->getAllTags();
 
@@ -37,7 +38,7 @@ class PostService
     }
 
     /**
-     * 店舗情報を取得する
+     * 店舗情報をDBから取得する
      * @return array<int, object>
      */
     private function getShopInfo(): array
@@ -65,5 +66,19 @@ class PostService
         $sql .= 'FROM tags'.PHP_EOL;
 
         return  DB::select($sql);
+    }
+
+    /**
+     * ユーザーがお気に入り（いいね）した投稿の post_id を取得する
+     * @param int $user_id
+     * @return array ユーザーが良いねした投稿のidリスト
+     */
+    public function getFavorites(int $user_id): array
+    {
+        $sql  = 'SELECT Favorites.post_id'.PHP_EOL;
+        $sql .= '   FROM Favorites'.PHP_EOL;
+        $sql .= 'WHERE user_id = :user_id'.PHP_EOL;
+
+        return DB::select($sql, ['user_id' => $user_id]);
     }
 }

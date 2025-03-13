@@ -45,7 +45,7 @@
 <body>
     <div class="container">
         <h1>投稿一覧</h1>
-        @foreach ($posts as $post)
+        @foreach ($posts['shopDetails'] as $post)
             <div class="post">
                 @if($post->image_url)
                     <img src="{{ $post->image_url }}" alt="画像">
