@@ -19,26 +19,55 @@
             margin: 0 auto;
         }
         .post {
+            display: flex;
+            align-items: center;
             background: #fff;
             border-radius: 8px;
             padding: 15px;
             margin-bottom: 15px;
             box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
         }
+        .post img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 15px;
+        }
+        .post-content {
+            flex: 1;
+        }
         .post h2 {
-            margin: 0;
+            margin: 0 0 5px;
             color: #007bff;
+            font-size: 20px;
         }
         .post p {
             margin: 5px 0;
             font-size: 16px;
             color: #555;
         }
-        .post img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin-bottom: 10px;
+        /* タグのスタイル */
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        .tag {
+            background-color: #007bff;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+        /* ハートマーク */
+        .likes {
+            font-size: 18px;
+            color: red;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
     </style>
 </head>
@@ -50,8 +79,22 @@
                 @if($post->image_url)
                     <img src="{{ $post->image_url }}" alt="画像">
                 @endif
-                <h2>{{ $post->shopname }}</h2>
-                <p>評価: <strong>{{ number_format($post->avg_rating, 1) }}</strong> ⭐</p>
+                <div class="post-content">
+                    <h2>{{ $post->shopname }}</h2>
+                    <p>評価: <strong>{{ number_format($post->avg_rating, 1) }}</strong> ⭐</p>
+                    
+                    <!-- タグ表示 -->
+                    @if (!empty($post->tags))
+                        <div class="tags">
+                            @foreach ($post->tags as $tag)
+                                <span class="tag">{{ $tag->name }}</span>
+                            @endforeach
+                        </div>
+                    @endif
+
+                    <!-- いいね（ハート）表示 -->
+                    <p class="likes">❤️</p>
+                </div>
             </div>
         @endforeach
     </div>
