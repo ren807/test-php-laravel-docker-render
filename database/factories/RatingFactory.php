@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Image>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Rating>
  */
-class ImageFactory extends Factory
+class RatingFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -16,11 +16,11 @@ class ImageFactory extends Factory
      */
     public function definition(): array
     {
-        $post_id = mt_rand(1,11);
 
         return [
-            'image_url'   => "https://picsum.photos/200/300",
-            'post_id'     => $post_id,
+            'user_id'     => null,
+            'post_id'     => null,
+            'rating'      => $this->faker->numberBetween(1, 5),
             'created_at'  => now(),
             'updated_at'  => now(),
         ];

@@ -39,6 +39,31 @@ class TagSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'フレンチ',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => '韓国料理',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'アジア料理',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => '焼肉',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'カレー',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }
