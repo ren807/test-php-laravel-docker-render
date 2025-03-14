@@ -1,6 +1,12 @@
 <?php
 
+use App\Models\Rating;
+use Database\Seeders\ImageSeeder;
 use Illuminate\Database\Seeder;
+use Database\Seeders\PostSeeder;
+use Database\Seeders\RatingSeeder;
+use Database\Seeders\TagSeeder;
+use Database\Seeders\UserSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,6 +17,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        $this->call(PostSeeder::class);
+        $this->call(ImageSeeder::class);
+        $this->call(TagSeeder::class);
+        $this->call(UserSeeder::class);
+        $this->call(RatingSeeder::class);
     }
 }
