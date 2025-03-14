@@ -5,6 +5,22 @@ use Illuminate\Support\Facades\DB;
 
 class PostService
 {
+    private $maxPage; // 最大ページ数
+    private $nowPage; // 現在のページ番号
+
+    /**
+     * ページャー情報をセットする
+     */
+    public function setPagerInfo($pageId) {
+        $this->nowPage = $pageId;
+    }
+
+    /**
+     * ページャーの情報を返す
+     */
+    public function getPagerInfo() {
+        return ['maxPage' => $this->maxPage, 'nowPage' => $this->nowPage];
+    }
 
     /**
      * 店舗情報を取得する
@@ -53,7 +69,7 @@ class PostService
         $sql .= 'GROUP BY posts.id, posts.shopname, posts.tags, posts.deleted_flg'.PHP_EOL;
         $sql .= 'ORDER BY avg_rating DESC'.PHP_EOL;
 
-        return DB::select($sql);
+        return $this->pager(DB::select($sql));
     }
 
     /**
@@ -80,5 +96,29 @@ class PostService
         $sql .= 'WHERE user_id = :user_id'.PHP_EOL;
 
         return DB::select($sql, ['user_id' => $user_id]);
+    }
+
+    /**
+     * ページャー
+     * @param array $shopData
+     * @return array 表示用データ
+     */
+    private function pager(array $shopData): array
+    {
+        $max = 10; // 1ページの最大表示件数
+
+        $shopNum = count($shopData); // 現在の合計店舗数
+
+        $this->maxPage = ceil($shopNum / $max); // 最大ページ数
+        
+        if (!isset($this->nowPage)) {
+            $this->nowPage = 1; // 特に指定されていなければ1ページ目を取得する
+        }
+
+        $startNo = ($this->nowPage - 1) * $max; // 開始ページ番号を取得する
+
+        $dispData = array_slice($shopData, $startNo, $max, true);
+
+        return $dispData;
     }
 }

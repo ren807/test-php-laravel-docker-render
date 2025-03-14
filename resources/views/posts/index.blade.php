@@ -61,13 +61,31 @@
             border-radius: 12px;
             font-size: 12px;
         }
-        /* ハートマーク */
+        /* いいね（ハート） */
         .likes {
             font-size: 18px;
             color: red;
             display: flex;
             align-items: center;
             gap: 5px;
+        }
+        /* ページネーション */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .pagination a,
+        .pagination span {
+            margin: 0 5px;
+            padding: 8px 12px;
+            text-decoration: none;
+            background: #007bff;
+            color: #fff;
+            border-radius: 5px;
+        }
+        .pagination .active {
+            background: #0056b3;
         }
     </style>
 </head>
@@ -97,6 +115,17 @@
                 </div>
             </div>
         @endforeach
+
+        <!-- ページネーション -->
+        <div class="pagination">
+            @for ($i = 1; $i <= $posts['pagerInfo']['maxPage']; $i++)
+                @if ($i == $posts['pagerInfo']['nowPage'])
+                    <span class="active">{{ $i }}</span>
+                @else
+                    <a href="?page_id={{ $i }}">{{ $i }}</a>
+                @endif
+            @endfor
+        </div>
     </div>
 </body>
 </html>

@@ -9,22 +9,25 @@ class PostController extends Controller
 {
     private $post;
 
-    public function __construct(PostService $post_service)
+    public function __construct(PostService $post_service, Request $request)
     {
         $this->post = $post_service;
+        $this->post->setPagerInfo($request->input('page_id'));
     }
 
     public function index()
     {
-        $id = 1;
+        $userId = 1;
         $posts = [];
 
         $shopDetails = $this->post->getShopDetails();
-        $Favorites   = $this->post->getFavorites($id);
+        $favorites   = $this->post->getFavorites($userId);
+        $pagerInfo     = $this->post->getPagerInfo();
 
         $posts = [
             'shopDetails' => $shopDetails,
-            'Favorites'   => $Favorites
+            'favorites'   => $favorites,
+            'pagerInfo'   => $pagerInfo,
         ];
 
         return View('posts.index', ['posts' => $posts]);
