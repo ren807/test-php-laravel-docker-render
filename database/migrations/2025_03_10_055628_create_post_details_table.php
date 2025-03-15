@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('post_details', function (Blueprint $table) {
             $table->id();
+            $table->string('address', 255);
+            $table->unsignedBigInteger('post_id');
             $table->timestamps();
+            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
         });
     }
 

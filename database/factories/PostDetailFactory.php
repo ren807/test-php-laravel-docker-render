@@ -17,7 +17,10 @@ class PostDetailFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'address'     => $this->faker->address,
+            'post_id'     => null,
+            'created_at'  => now(),
+            'updated_at'  => now(),
         ];
     }
 }
