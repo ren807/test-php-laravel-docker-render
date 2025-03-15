@@ -17,5 +17,7 @@ Route::get('/wel', function () {
     return view('welcome');
 });
 
-Route::get('/', 'PostController@index');
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/', 'PostController@index');
+Route::get('/show/{id}', 'PostController@show');

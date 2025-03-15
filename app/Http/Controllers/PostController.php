@@ -9,21 +9,20 @@ class PostController extends Controller
 {
     private $post;
 
-    public function __construct(PostService $post_service, Request $request)
+    public function __construct(PostService $post_service)
     {
         $this->post = $post_service;
-        $this->post->setPagerInfo($request->input('page_id'));
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $userId = 1;
-        $posts = [];
-
-        $shopDetails = $this->post->getShopDetails();
+        $this->post->setPagerInfo($request->input('page_id'));
+        
+        $shopDetails = $this->post->getShopData();
         $favorites   = $this->post->getFavorites($userId);
         $pagerInfo     = $this->post->getPagerInfo();
-
+        
         $posts = [
             'shopDetails' => $shopDetails,
             'favorites'   => $favorites,
@@ -31,5 +30,13 @@ class PostController extends Controller
         ];
 
         return View('posts.index', ['posts' => $posts]);
+    }
+
+    public function show()
+    {
+        $id = 1;
+        $post = $this->post->getShopDetail($id);
+        dd($post);
+        return View('posts.show');
     }
 }
