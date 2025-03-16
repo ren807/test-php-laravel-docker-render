@@ -19,12 +19,12 @@ class PostController extends Controller
         $userId = 1;
         $this->post->setPagerInfo($request->input('page_id'));
         
-        $shopDetails = $this->post->getShopData();
+        $shopData = $this->post->convShopData();
         $favorites   = $this->post->getFavorites($userId);
         $pagerInfo     = $this->post->getPagerInfo();
-        
+
         $posts = [
-            'shopDetails' => $shopDetails,
+            'shopData' => $shopData,
             'favorites'   => $favorites,
             'pagerInfo'   => $pagerInfo,
         ];
@@ -34,9 +34,15 @@ class PostController extends Controller
 
     public function show()
     {
-        $id = 1;
-        $post = $this->post->getShopDetail($id);
-        dd($post);
-        return View('posts.show');
+        $id = 10;
+        $shopDetail = $this->post->convShopDetailData($id);
+        $images = $this->post->getShopImages($id);
+
+        $post = [
+            'shopDetail' => $shopDetail,
+            'images'     => $images,
+        ];
+
+        return View('posts.show', ['post' => $post]);
     }
 }

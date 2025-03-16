@@ -23,10 +23,10 @@ class PostService
     }
 
     /**
-     * 店舗情報を取得する
+     * 店舗一覧情報をView用に変換する
      * @return array<int, object>
      */
-    public function getShopData(): array
+    public function convShopData(): array
     {
         // 店舗情報を取得する
         $shopInfo = $this->getShopInfo();
@@ -51,6 +51,31 @@ class PostService
         }
 
         return $shopInfo;
+    }
+
+    public function convShopDetailData($shopId)
+    {
+        // 店舗詳細情報を取得する
+        $shopDetail = $this->getShopDetail($shopId);
+        
+        // タグを全種類取得する
+        $tags = $this->getAllTags();
+        
+        // 以下、タグ名を追加する処理
+        $tagIds = explode(',', $shopDetail['tags']);
+
+        // タグリストの初期化
+        $tagList = [];
+
+        foreach ($tagIds as $tagId) {
+            if (isset($tags[$tagId])) {
+                $tagList = $tags[$tagId];
+            }
+        }
+        
+        $shopDetail['tags'] = $tagList;
+
+        return $shopDetail;
     }
 
     /**
@@ -123,11 +148,11 @@ class PostService
     }
 
     /**
-     * 投稿詳細店舗
+     * 店舗詳細を取得
      * @param $shopId 店舗id
      * @return array 店舗情報
      */
-    public function getShopDetail(int $shopId): array
+    public function getShopDetail(int $shopId)
     {
         $sql  = 'SELECT posts.id, posts.shopname, posts.tags,'.PHP_EOL;
         $sql .= 'ROUND(AVG(rating)::numeric, 1) AS avg_rating, post_details.address'.PHP_EOL;
@@ -139,6 +164,19 @@ class PostService
         $sql .=     'WHERE posts.id = :shopId'.PHP_EOL;
         $sql .= 'GROUP BY posts.id, posts.shopname, posts.tags, posts.deleted_flg, post_details.address'.PHP_EOL;
         $sql .= 'ORDER BY avg_rating DESC'.PHP_EOL;
+
+        $result = DB::select($sql, ['shopId' => $shopId]);
+
+        return !empty($result) ? (array) current($result) : [];
+    }
+
+    public function getShopImages($shopId)
+    {
+        $sql  = 'SELECT images.image_url'.PHP_EOL;
+        $sql .= 'FROM posts'.PHP_EOL;
+        $sql .= '    INNER JOIN images'.PHP_EOL;
+        $sql .= '    ON posts.id = images.post_id'.PHP_EOL;
+        $sql .= '   WHERE posts.id = :shopId'.PHP_EOL;
 
         return DB::select($sql, ['shopId' => $shopId]);
     }

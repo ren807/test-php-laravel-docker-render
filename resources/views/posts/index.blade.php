@@ -7,98 +7,126 @@
     <style>
         body { 
             font-family: Arial, sans-serif; 
-            margin: 20px; 
-            background-color: #f8f9fa;
+            margin: 20px;
+            background-color: #f1f3f5;
         }
+
         h1 {
             text-align: center;
             color: #333;
+            font-size: 28px;
         }
+
+        h2 a {
+            display: inline-block;
+            font-size: 20px;
+            font-weight: bold;
+            color: #007bff;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            transition: background-color 0.3s;
+        }
+
+        h2 a:hover {
+            background-color: #e2e6ea;
+        }
+
         .container {
             max-width: 800px;
             margin: 0 auto;
         }
+
         .post {
             display: flex;
             align-items: center;
             background: #fff;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            padding: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
         }
+
         .post img {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             object-fit: cover;
-            border-radius: 8px;
-            margin-right: 15px;
+            border-radius: 5px;
+            margin-right: 12px;
         }
+
         .post-content {
             flex: 1;
         }
+
         .post h2 {
-            margin: 0 0 5px;
-            color: #007bff;
-            font-size: 20px;
+            margin: 0 0 8px;
+            font-size: 18px;
+            color: #343a40;
         }
+
         .post p {
             margin: 5px 0;
-            font-size: 16px;
-            color: #555;
+            font-size: 14px;
+            color: #495057;
         }
-        /* タグのスタイル */
+
         .tags {
             display: flex;
             flex-wrap: wrap;
             gap: 5px;
-            margin-top: 5px;
+            margin-top: 8px;
         }
+
         .tag {
-            background-color: #007bff;
+            background-color: #6c757d;
             color: white;
             padding: 3px 8px;
             border-radius: 12px;
             font-size: 12px;
         }
-        /* いいね（ハート） */
+
         .likes {
-            font-size: 18px;
-            color: red;
+            font-size: 16px;
+            color: #e74c3c;
             display: flex;
             align-items: center;
             gap: 5px;
         }
-        /* ページネーション */
+
         .pagination {
             display: flex;
             justify-content: center;
             margin-top: 20px;
         }
+
         .pagination a,
         .pagination span {
-            margin: 0 5px;
-            padding: 8px 12px;
+            margin: 0 4px;
+            padding: 6px 10px;
             text-decoration: none;
-            background: #007bff;
+            background-color: #007bff;
             color: #fff;
             border-radius: 5px;
+            font-size: 14px;
         }
+
         .pagination .active {
-            background: #0056b3;
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>投稿一覧</h1>
-        @foreach ($posts['shopDetails'] as $post)
+        @foreach ($posts['shopData'] as $post)
             <div class="post">
                 @if($post->image_url)
                     <img src="{{ $post->image_url }}" alt="画像">
                 @endif
                 <div class="post-content">
-                    <h2>{{ $post->shopname }}</h2>
+                    <h2><a href="/show/{{ $post->id }}">{{ $post->shopname }}</a></h2>
                     <p>評価: <strong>{{ number_format($post->avg_rating, 1) }}</strong> ⭐</p>
                     
                     <!-- タグ表示 -->
