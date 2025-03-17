@@ -32,9 +32,8 @@ class PostController extends Controller
         return View('posts.index', ['posts' => $posts]);
     }
 
-    public function show()
+    public function show(int $id)
     {
-        $id = 10;
         $shopDetail = $this->post->convShopDetailData($id);
         $images = $this->post->getShopImages($id);
 

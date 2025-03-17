@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,5 +20,5 @@ Route::get('/wel', function () {
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/', 'PostController@index');
-Route::get('/show/{id}', 'PostController@show');
+Route::get('/', [PostController::class, 'index'])->name('index');
+Route::get('/show/{id}', [PostController::class, 'show'])->name('show');

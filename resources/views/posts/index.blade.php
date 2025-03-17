@@ -126,9 +126,9 @@
                     <img src="{{ $post->image_url }}" alt="画像">
                 @endif
                 <div class="post-content">
-                    <h2><a href="/show/{{ $post->id }}">{{ $post->shopname }}</a></h2>
+                    <h2><a href="{{ route('show', ['id' => $post->id]) }}">{{ $post->shopname }}</a></h2>
                     <p>評価: <strong>{{ number_format($post->avg_rating, 1) }}</strong> ⭐</p>
-                    
+
                     <!-- タグ表示 -->
                     @if (!empty($post->tags))
                         <div class="tags">
