@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,5 +18,9 @@ Route::get('/wel', function () {
     return view('welcome');
 });
 
-Route::get('/', 'PostController@index');
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/', [PostController::class, 'index'])->name('index');
+Route::get('/show/{id}', [PostController::class, 'show'])->name('show');
+
+Route::post('/ajax/eval',[PostController::class, 'eval'])->name('ajax/eval');

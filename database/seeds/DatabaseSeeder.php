@@ -1,7 +1,8 @@
 <?php
 
-use App\Models\Rating;
+use App\Models\PostDetail;
 use Database\Seeders\ImageSeeder;
+use Database\Seeders\PostDetailSeeder;
 use Illuminate\Database\Seeder;
 use Database\Seeders\PostSeeder;
 use Database\Seeders\RatingSeeder;
@@ -22,5 +23,6 @@ class DatabaseSeeder extends Seeder
         $this->call(TagSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(RatingSeeder::class);
+        $this->call(PostDetailSeeder::class);
     }
 }
