@@ -44,4 +44,28 @@ class PostController extends Controller
 
         return View('posts.show', ['post' => $post]);
     }
+
+    public function eval()
+    {
+        $userId = 4;
+        $postId = request()->post('postId');
+        $rating = request()->post('rating');
+        
+        // 以下、ログインユーザがすでに評価しているか確認する
+        $shopRating = $this->post->getRating($userId, $postId);
+
+        if (empty($shopRating)) {
+            $this->post->storeReview($userId, $postId, $rating); // 未評価の場合、新たにDBに追加する
+        } else {
+            $this->post->updateReview($userId, $postId, $rating); // 評価済みの場合、DBを更新する
+        }
+
+        $data = [
+            'postId' => $postId,
+            'rating' => $rating,
+            'shopRating' => $shopRating,
+        ];
+
+        return response()->json($data);
+    }
 }

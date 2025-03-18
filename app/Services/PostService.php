@@ -180,4 +180,48 @@ class PostService
 
         return DB::select($sql, ['shopId' => $shopId]);
     }
+
+    public function getRating(int $userId, int $postId)
+    {
+        $sql  = 'SELECT * FROM ratings'.PHP_EOL;
+	    $sql .= 'WHERE user_id = :userId AND post_id = :postId'.PHP_EOL;
+
+        $params = [
+            'userId' => $userId,
+            'postId' => $postId,
+        ];
+
+        $result = DB::select($sql, $params);
+
+        return !empty($result) ? (array) current($result) : [];
+    }
+
+    public function storeReview(int $userId, int $postId, int $rating)
+    {
+        $sql  = 'INSERT INTO ratings'.PHP_EOL;
+        $sql .= '(user_id, post_id, rating, created_at, updated_at)'.PHP_EOL;
+        $sql .= 'VALUES (:userId, :postId, :rating, NOW(), NOW())'.PHP_EOL;
+
+        $params = [
+            'userId' => $userId,
+            'postId' => $postId,
+            'rating' => $rating
+        ];
+
+        DB::insert($sql, $params);
+    }
+
+    public function updateReview(int $userId, int $postId, int $rating)
+    {
+        $sql  = 'UPDATE ratings SET rating = :rating'.PHP_EOL;
+        $sql .= 'WHERE user_id = :userId AND post_id = :postId'.PHP_EOL;
+
+        $params = [
+            'userId' => $userId,
+            'postId' => $postId,
+            'rating' => $rating        
+        ];
+
+        DB::update($sql, $params);
+    }
 }

@@ -94,15 +94,40 @@
             height: 40px;
             z-index: 1000;
         }
-
         .slick-prev::before, .slick-next::before {
             font-size: 30px;
             color: #007bff; /* 矢印の色を変更 */
             opacity: 1; /* デフォルトで見えるように */
         }
-
         .slick-prev:hover::before, .slick-next:hover::before {
             color: #0056b3; /* ホバー時に色を少し濃く */
+        }
+        .review {
+            text-align: center;
+        }
+        .stars {
+            display: flex;                /* フレックスボックスを使用 */
+            justify-content: center;      /* 横方向で中央寄せ */
+            align-items: center;          /* 縦方向で中央寄せ */
+        }
+        .stars span{
+            display: flex;               /* 要素をフレックスボックスにする */
+            flex-direction: row-reverse; /* 星を逆順に並べる */
+            justify-content: flex-end;   /* 逆順なので、左寄せにする */
+        }
+        .stars input[type='radio']{
+            display: none;               /* デフォルトのラジオボタンを非表示にする */
+        }
+        .stars label{
+            color: #D2D2D2;              /* 未選択の星をグレー色に指定 */
+            font-size: 30px;             /* 星の大きさを30pxに指定 */
+            padding: 0 5px;              /* 左右の余白を5pxに指定 */
+            cursor: pointer;             /* カーソルが上に乗ったときに指の形にする */
+        }
+        .stars label:hover,
+        .stars label:hover ~ label,
+        .stars input[type='radio']:checked ~ label{
+            color: #F8C601;              /* 選択された星以降をすべて黄色にする */
         }
     </style>
 </head>
@@ -132,6 +157,19 @@
             <p class="likes">❤️</p>
         </div>
         <a href="{{ route('index') }}" class="back-link">一覧に戻る</a>
+    </div>
+    <div class="review">
+        <p>レビュー</p>
+        <div class="stars">
+            <span>
+                <input id="review01" type="radio" name="review" value="5"><label for="review01">★</label>
+                <input id="review02" type="radio" name="review" value="4"><label for="review02">★</label>
+                <input id="review03" type="radio" name="review" value="3"><label for="review03">★</label>
+                <input id="review04" type="radio" name="review" value="2"><label for="review04">★</label>
+                <input id="review05" type="radio" name="review" value="1"><label for="review05">★</label>
+                <input type="hidden" name="postId" value="{{ $post['shopDetail']['id'] }}">
+            </span>
+        </div>
     </div>
 </body>
 </html>
