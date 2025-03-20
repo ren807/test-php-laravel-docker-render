@@ -35,9 +35,11 @@ class PostService
         $tags = $this->getAllTags();
 
         // View用にタグを変換
-        foreach ($shopInfo as $si) {
-            $si->tags = $this->convTagsData($si->tags, $tags);
+        foreach ($shopInfo as &$si) {
+            $si['tags'] = $this->convTagsData($si['tags'], $tags);
         }
+
+        unset($si);
 
         return $shopInfo;
     }
@@ -93,14 +95,17 @@ class PostService
         $sql  = 'SELECT posts.id, posts.shopname, posts.tags, deleted_flg,'.PHP_EOL;
         $sql .= 'ROUND(AVG(rating)::numeric, 1) AS avg_rating, MAX(image_url) AS image_url'.PHP_EOL;
         $sql .= 'FROM posts'.PHP_EOL;
-        $sql .= '   INNER JOIN ratings'.PHP_EOL;
+        $sql .= '   LEFT JOIN ratings'.PHP_EOL;
         $sql .= '       ON posts.id = ratings.post_id'.PHP_EOL;
-        $sql .= '   INNER JOIN images'.PHP_EOL;
+        $sql .= '   LEFT JOIN images'.PHP_EOL;
         $sql .= '       ON posts.id = images.post_id'.PHP_EOL;
         $sql .= 'GROUP BY posts.id, posts.shopname, posts.tags, posts.deleted_flg'.PHP_EOL;
         $sql .= 'ORDER BY avg_rating DESC'.PHP_EOL;
 
-        return $this->pager(DB::select($sql));
+        $result = DB::select($sql);
+        $convArray = array_map(fn($row) => (array) $row, $result); // 配列内のオブジェクトを配列に変換
+
+        return $this->pager($convArray);
     }
 
     /**

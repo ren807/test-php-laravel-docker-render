@@ -26,13 +26,13 @@ class PostController extends Controller
         $favorites   = $this->post->getFavorites($this->userId);
         $pagerInfo     = $this->post->getPagerInfo();
 
-        $posts = [
-            'shopData' => $shopData,
+        $data = [
+            'shopData'    => $shopData,
             'favorites'   => $favorites,
-            'pagerInfo'   => $pagerInfo,
+            'pagerInfo'   => $pagerInfo
         ];
 
-        return View('posts.index', ['posts' => $posts]);
+        return View('posts.index', $data);
     }
 
     public function create()
