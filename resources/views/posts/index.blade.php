@@ -133,7 +133,7 @@
                     @if (!empty($post->tags))
                         <div class="tags">
                             @foreach ($post->tags as $tag)
-                                <span class="tag">{{ $tag->name }}</span>
+                                <span class="tag">{{ $tag['name'] }}</span>
                             @endforeach
                         </div>
                     @endif

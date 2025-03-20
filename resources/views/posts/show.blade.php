@@ -135,21 +135,25 @@
     <div class="container">
         <h1>投稿詳細</h1>
         <div class="post">
-            @if(!empty($post['images']))
+            @if(!is_null($images[0]['image_url']))
                 <div class="slick-slider">
-                    @foreach($post['images'] as $image)
-                        <div><img src="{{ $image->image_url }}" alt="画像"></div>
+                    @foreach($images as $image)
+                        <div><img src="{{ $image['image_url'] }}" alt="画像"></div>
                     @endforeach
                 </div>
+            @elseif(is_null($images[0]['image_url']))
+                <div class="slick-slider">
+                    <div><img src="https://picsum.photos/200/300" alt="画像"></div>
+                </div>
             @endif
-            <h2>{{ $post['shopDetail']['shopname'] }}</h2>
-            <p>評価: <strong>{{ number_format($post['shopDetail']['avg_rating'], 1) }}</strong> ⭐</p>
-            <p>住所: {{ $post['shopDetail']['address'] }}</p>
+            <h2>{{ $shopDetail['shopname'] }}</h2>
+            <p>評価: <strong>{{ number_format($shopDetail['avg_rating'], 1) }}</strong> ⭐</p>
+            <p>住所: {{ $shopDetail['address'] }}</p>
             
-            @if (!empty($post['shopDetail']->tags))
+            @if (!empty($shopDetail['tags']))
                 <div class="tags">
-                    @foreach ($post['shopDetail']->tags as $tag)
-                        <span class="tag">{{ $tag->name }}</span>
+                    @foreach ($shopDetail['tags'] as $tag)
+                        <span class="tag">{{ $tag['name'] }}</span>
                     @endforeach
                 </div>
             @endif
@@ -167,7 +171,7 @@
                 <input id="review03" type="radio" name="review" value="3"><label for="review03">★</label>
                 <input id="review04" type="radio" name="review" value="2"><label for="review04">★</label>
                 <input id="review05" type="radio" name="review" value="1"><label for="review05">★</label>
-                <input type="hidden" name="postId" value="{{ $post['shopDetail']['id'] }}">
+                <input type="hidden" name="postId" value="{{ $shopDetail['id'] }}">
             </span>
         </div>
     </div>

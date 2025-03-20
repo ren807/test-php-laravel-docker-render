@@ -34,48 +34,54 @@ class PostService
         // タグを全種類取得する
         $tags = $this->getAllTags();
 
-        // タグ名を追加する処理
+        // View用にタグを変換
         foreach ($shopInfo as $si) {
-            $tagIds = explode(',', $si->tags);
-
-            // タグリストの初期化
-            $tagList = [];
-
-            foreach ($tagIds as $tagId) {
-                if (isset($tags[$tagId])) {
-                    $tagList[] = $tags[$tagId];
-                }
-            }
-
-            $si->tags = $tagList;
+            $si->tags = $this->convTagsData($si->tags, $tags);
         }
 
         return $shopInfo;
     }
 
-    public function convShopDetailData($shopId)
+    /**
+     * 店舗詳細の情報をView用に変換する
+     * @param int $shopId
+     * @return array
+     */
+    public function convShopDetailData(int $shopId): array
     {
         // 店舗詳細情報を取得する
         $shopDetail = $this->getShopDetail($shopId);
         
         // タグを全種類取得する
         $tags = $this->getAllTags();
-        
-        // 以下、タグ名を追加する処理
-        $tagIds = explode(',', $shopDetail['tags']);
 
+        // View用にタグを変換
+        $shopDetail['tags'] = $this->convTagsData($shopDetail['tags'], $tags);
+
+        return $shopDetail;
+    }
+
+    /**
+     * タグデータをView用に変換する関数
+     * @param string $shopTags
+     * @param array $tags
+     * @return array
+     */
+    public function convTagsData(string $shopTags, array $tags): array
+    {
         // タグリストの初期化
         $tagList = [];
 
+        $tagIds = explode(',', $shopTags);
+
+        // 店舗に付けられているタグをリストに追加
         foreach ($tagIds as $tagId) {
             if (isset($tags[$tagId])) {
-                $tagList = $tags[$tagId];
+                $tagList[] = $tags[$tagId];
             }
         }
         
-        $shopDetail['tags'] = $tagList;
-
-        return $shopDetail;
+        return $tagList;
     }
 
     /**
@@ -99,14 +105,18 @@ class PostService
 
     /**
      * タグを全て取得する
-     * @return array<int, object>
+     * @return array
      */
     public function getAllTags(): array
     {
         $sql  = 'SELECT id, name'.PHP_EOL;
         $sql .= 'FROM tags'.PHP_EOL;
 
-        return  DB::select($sql);
+        $result = DB::select($sql);
+        $convArray = array_map(fn($row) => (array) $row, $result); // 配列内のオブジェクトを配列に変換
+        $dispTags = array_column($convArray, null, 'id'); // 配列のキーをタグのidに変換
+
+        return $dispTags;
     }
 
     /**
@@ -152,12 +162,12 @@ class PostService
      * @param $shopId 店舗id
      * @return array 店舗情報
      */
-    public function getShopDetail(int $shopId)
+    public function getShopDetail(int $shopId): array
     {
         $sql  = 'SELECT posts.id, posts.shopname, posts.tags,'.PHP_EOL;
         $sql .= 'ROUND(AVG(rating)::numeric, 1) AS avg_rating, post_details.address'.PHP_EOL;
         $sql .= 'FROM posts'.PHP_EOL;
-        $sql .= '   INNER JOIN ratings'.PHP_EOL;
+        $sql .= '   LEFT JOIN ratings'.PHP_EOL;
         $sql .= '       ON posts.id = ratings.post_id'.PHP_EOL;
         $sql .= '   INNER JOIN post_details'.PHP_EOL;
         $sql .= '       ON posts.id = post_details.post_id'.PHP_EOL;
@@ -170,15 +180,27 @@ class PostService
         return !empty($result) ? (array) current($result) : [];
     }
 
-    public function getShopImages($shopId)
+    /**
+     * 店舗の画像を取得
+     * @param int $shopId
+     * @return array
+     */
+    public function getShopImages(int $shopId): array
     {
         $sql  = 'SELECT images.image_url'.PHP_EOL;
         $sql .= 'FROM posts'.PHP_EOL;
-        $sql .= '    INNER JOIN images'.PHP_EOL;
+        $sql .= '    LEFT JOIN images'.PHP_EOL;
         $sql .= '    ON posts.id = images.post_id'.PHP_EOL;
         $sql .= '   WHERE posts.id = :shopId'.PHP_EOL;
 
-        return DB::select($sql, ['shopId' => $shopId]);
+        $param = [
+            'shopId' => $shopId
+        ];
+
+        $result = DB::select($sql, $param);
+        $convArray = array_map(fn($row) => (array) $row, $result); // 配列内のオブジェクトを配列に変換
+
+        return $convArray;
     }
 
     public function getRating(int $userId, int $postId)
@@ -223,5 +245,42 @@ class PostService
         ];
 
         DB::update($sql, $params);
+    }
+
+    public function insertPosts(string $shopName, string $tags)
+    {
+        $sql  = 'INSERT INTO posts'.PHP_EOL;
+        $sql .= '(shopname, tags, deleted_flg, created_at, updated_at)'.PHP_EOL;
+        $sql .= 'VALUES (:shopname, :tags, :deleted_flg, NOW(), NOW())'.PHP_EOL;
+
+        $params = [
+            'shopname'    => $shopName,
+            'tags'        => $tags,
+            'deleted_flg' => false,
+        ];
+
+        DB::insert($sql, $params);
+    }
+
+    public function insertPostDetail(string $address, int $postId)
+    {
+        $sql  = 'INSERT INTO post_details'.PHP_EOL;
+        $sql .= '(address, post_id, created_at, updated_at)'.PHP_EOL;
+        $sql .= 'VALUES (:address, :postId, NOW(), NOW())'.PHP_EOL;
+
+        $params = [
+            'address'     => $address,
+            'postId'     => $postId,
+        ];
+
+        DB::insert($sql, $params);
+    }
+
+    public function getShopByMaxId()
+    {
+        $sql  = 'SELECT MAX(id) AS shopId FROM posts'.PHP_EOL;
+        $result = DB::select($sql);
+
+        return !empty($result) ? (array) current($result) : [];
     }
 }
