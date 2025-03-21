@@ -24,7 +24,7 @@ class PostService
 
     /**
      * 店舗一覧情報をView用に変換する
-     * @return array<int, object>
+     * @return array
      */
     public function convShopData(): array
     {
@@ -64,7 +64,7 @@ class PostService
     }
 
     /**
-     * タグデータをView用に変換する関数
+     * タグデータをView用に変換する関数（例：「1,2,3」→「[1=>中華, 2=>フレンチ, 3=>寿司]」）
      * @param string $shopTags
      * @param array $tags
      * @return array
@@ -88,7 +88,7 @@ class PostService
 
     /**
      * 店舗情報をDBから取得する
-     * @return array<int, object>
+     * @return array
      */
     public function getShopInfo(): array
     {
@@ -102,7 +102,7 @@ class PostService
         $sql .= 'GROUP BY posts.id, posts.shopname, posts.tags, posts.deleted_flg'.PHP_EOL;
         $sql .= 'ORDER BY avg_rating DESC'.PHP_EOL;
 
-        $result = DB::select($sql);
+        $result    = DB::select($sql);
         $convArray = array_map(fn($row) => (array) $row, $result); // 配列内のオブジェクトを配列に変換
 
         return $this->pager($convArray);
@@ -287,5 +287,32 @@ class PostService
         $result = DB::select($sql);
 
         return !empty($result) ? (array) current($result) : [];
+    }
+
+    public function updatePosts(string $shopName, string $tags, int $postId)
+    {
+        $sql  = 'UPDATE posts SET shopname = :shopname, tags = :tags, updated_at = NOW()'.PHP_EOL;
+        $sql .= 'WHERE posts.id = :postId'.PHP_EOL;
+
+        $params = [
+            'shopname'    => $shopName,
+            'tags'        => $tags,
+            'postId'      => $postId,
+        ];
+
+        DB::update($sql, $params);
+    }
+
+    public function updatePostDetail(string $address, int $postId)
+    {
+        $sql  = 'UPDATE post_details SET address = :address, updated_at = NOW()'.PHP_EOL;
+        $sql .= 'WHERE post_id = :postId'.PHP_EOL;
+
+        $params = [
+            'address'     => $address,
+            'postId'      => $postId,
+        ];
+
+        DB::update($sql, $params);
     }
 }

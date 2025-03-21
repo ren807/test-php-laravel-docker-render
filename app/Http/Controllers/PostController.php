@@ -10,8 +10,14 @@ class PostController extends Controller
 {
     private $post;
     private $userId = 4;
-    const STORE_CONFIRM  = "confirm";
-    const STORE_COMPLETE = "complete";
+
+    private $formMode;
+
+    const STORE_CONFIRM   = "confirm";
+    const STORE_COMPLETE  = "complete";
+
+    const UPDATE_CONFIRM  = "confirm";
+    const UPDATE_COMPLETE = "complete";
 
     public function __construct(PostService $post_service)
     {
@@ -57,7 +63,7 @@ class PostController extends Controller
                 'tags'      => $convTags,
             ];
 
-            return View('posts.confirm', $data);
+            return View('posts.create-confirm', $data);
         }
 
         // 登録完了画面に遷移
@@ -74,7 +80,7 @@ class PostController extends Controller
                 $this->post->insertPostDetail($inputData['address'], $maxId['shopid']);
             });
 
-            return View('posts.complete');
+            return View('posts.create-complete');
         }
     }
 
@@ -89,6 +95,56 @@ class PostController extends Controller
         ];
 
         return View('posts.show', $data);
+    }
+
+    public function edit(int $id)
+    {
+        $shopDetail = $this->post->convShopDetailData($id);
+        $images     = $this->post->getShopImages($id);
+        $tags       = $this->post->getAllTags();
+
+        $data = [
+            'shopDetail' => $shopDetail,
+            'images'     => $images,
+            'tags'       => $tags,
+        ];
+
+        return View('posts.edit', $data);
+    }
+
+    public function update(Request $request)
+    {
+        $inputData         = $request->all();
+        $inputData['tags'] = implode(',', $inputData['tags']);
+        
+
+        // 確認画面に遷移
+        if (!empty($inputData["confirm"]) && $inputData["confirm"] === self::UPDATE_CONFIRM) {
+
+            $tags = $this->post->getAllTags();
+            $convTags = $this->post->convTagsData($inputData['tags'], $tags);
+
+            $data = [
+                'inputData' => $inputData,
+                'tags'      => $convTags,
+            ];
+
+            return View('posts.edit-confirm', $data);
+        }
+
+        // 更新完了画面に遷移
+        if (!empty($inputData["complete"]) && $inputData["complete"] === self::UPDATE_COMPLETE) {
+
+            DB::transaction(function () use ($inputData) {
+                // postsテーブルを更新
+                $this->post->updatePosts($inputData['shopname'], $inputData['tags'], $inputData['id']);
+        
+                // posts_detailテーブルに登録
+                $this->post->updatePostDetail($inputData['address'], $inputData['id']);
+            });
+
+            return View('posts.edit-complete', ['id' => $inputData['id']]);
+        }
     }
 
     public function eval()
