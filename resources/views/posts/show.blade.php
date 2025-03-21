@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>投稿詳細</title>
-
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     <script src="{{ mix('js/app.js') }}" defer></script>
     <style>
@@ -21,6 +20,23 @@
         .container {
             max-width: 500px;
             margin: 0 auto;
+        }
+        .edit-shop-content {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .edit-shop-content a {
+            display: inline-block;
+            background-color: #ffc107; /* 黄色系のボタン */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .edit-shop-content a:hover {
+            background-color: #e0a800;
         }
         .post {
             background: #fff;
@@ -134,6 +150,11 @@
 <body>
     <div class="container">
         <h1>投稿詳細</h1>
+        <div class="edit-shop-content">
+            <a href="{{ route('edit', ['id' => $shopDetail['id']]) }}">
+                ✏ 編集する
+            </a>
+        </div>
         <div class="post">
             @if(!is_null($images[0]['image_url']))
                 <div class="slick-slider">
