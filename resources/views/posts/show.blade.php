@@ -22,12 +22,17 @@
             margin: 0 auto;
         }
         .edit-shop-content {
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
             margin-bottom: 20px;
         }
-        .edit-shop-content a {
+        .edit-shop-content a, 
+        .edit-shop-content form {
             display: inline-block;
-            background-color: #ffc107; /* 黄色系のボタン */
+        }
+        .edit-button {
+            background-color: #ffc107;
             color: white;
             padding: 10px 20px;
             border-radius: 5px;
@@ -35,8 +40,21 @@
             font-weight: bold;
             transition: background-color 0.3s;
         }
-        .edit-shop-content a:hover {
+        .edit-button:hover {
             background-color: #e0a800;
+        }
+        .delete-button {
+            background-color: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .delete-button:hover {
+            background-color: #c82333;
         }
         .post {
             background: #fff;
@@ -91,69 +109,62 @@
             padding: 10px;
             border-radius: 5px;
         }
-        .slick-slider div {
-            text-align: center; /* スライドの中身を中央揃え */
-        }
-        .slick-slider img {
-            display: block;
-            margin: 0 auto;
-            width: auto; /* 幅を自動調整 */
-            max-width: 100%; /* コンテナの幅を超えないように */
-            height: auto; /* 高さを自動調整 */
-            max-height: 300px; /* 最大高さを300pxに制限 */
-            object-fit: contain; /* 縦横比を維持して画像を表示 */
-            border-radius: 8px;
-        }
-        .slick-prev, .slick-next {
-            font-size: 0; /* デフォルトのテキストを非表示 */
-            width: 40px;
-            height: 40px;
-            z-index: 1000;
-        }
-        .slick-prev::before, .slick-next::before {
-            font-size: 30px;
-            color: #007bff; /* 矢印の色を変更 */
-            opacity: 1; /* デフォルトで見えるように */
-        }
-        .slick-prev:hover::before, .slick-next:hover::before {
-            color: #0056b3; /* ホバー時に色を少し濃く */
-        }
         .review {
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .review p {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
         }
         .stars {
-            display: flex;                /* フレックスボックスを使用 */
-            justify-content: center;      /* 横方向で中央寄せ */
-            align-items: center;          /* 縦方向で中央寄せ */
+            display: flex;
+            justify-content: center;
         }
-        .stars span{
-            display: flex;               /* 要素をフレックスボックスにする */
-            flex-direction: row-reverse; /* 星を逆順に並べる */
-            justify-content: flex-end;   /* 逆順なので、左寄せにする */
+        .stars span {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
         }
-        .stars input[type='radio']{
-            display: none;               /* デフォルトのラジオボタンを非表示にする */
+        .stars input[type='radio'] {
+            display: none;
         }
-        .stars label{
-            color: #D2D2D2;              /* 未選択の星をグレー色に指定 */
-            font-size: 30px;             /* 星の大きさを30pxに指定 */
-            padding: 0 5px;              /* 左右の余白を5pxに指定 */
-            cursor: pointer;             /* カーソルが上に乗ったときに指の形にする */
+        .stars label {
+            color: #D2D2D2;
+            font-size: 30px;
+            padding: 0 5px;
+            cursor: pointer;
+            transition: color 0.3s;
         }
         .stars label:hover,
         .stars label:hover ~ label,
-        .stars input[type='radio']:checked ~ label{
-            color: #F8C601;              /* 選択された星以降をすべて黄色にする */
+        .stars input[type='radio']:checked ~ label {
+            color: #F8C601;
         }
     </style>
+    <script>
+        function confirmDelete(event) {
+            if (!confirm('本当に削除しますか？')) {
+                event.preventDefault();
+            }
+        }
+    </script>
 </head>
 <body>
     <div class="container">
         <h1>投稿詳細</h1>
         <div class="edit-shop-content">
-            <a href="{{ route('edit', ['id' => $shopDetail['id']]) }}">
+            <a href="{{ route('edit', ['id' => $shopDetail['id']]) }}" class="edit-button">
                 ✏ 編集する
             </a>
+            <form action="{{ route('delete', ['id' => $shopDetail['id']]) }}" method="POST" onsubmit="return confirm('本当に削除しますか？');">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="delete-button">🗑 削除する</button>
+            </form>
         </div>
         <div class="post">
             @if(!is_null($images[0]['image_url']))
@@ -187,13 +198,18 @@
         <p>レビュー</p>
         <div class="stars">
             <span>
-                <input id="review01" type="radio" name="review" value="5"><label for="review01">★</label>
-                <input id="review02" type="radio" name="review" value="4"><label for="review02">★</label>
-                <input id="review03" type="radio" name="review" value="3"><label for="review03">★</label>
-                <input id="review04" type="radio" name="review" value="2"><label for="review04">★</label>
-                <input id="review05" type="radio" name="review" value="1"><label for="review05">★</label>
-                <input type="hidden" name="postId" value="{{ $shopDetail['id'] }}">
+                <input id="review01" type="radio" name="review" value="5">
+                <label for="review01">★</label>
+                <input id="review02" type="radio" name="review" value="4">
+                <label for="review02">★</label>
+                <input id="review03" type="radio" name="review" value="3">
+                <label for="review03">★</label>
+                <input id="review04" type="radio" name="review" value="2">
+                <label for="review04">★</label>
+                <input id="review05" type="radio" name="review" value="1">
+                <label for="review05">★</label>
             </span>
+            <input type="hidden" name="postId" value="{{ $shopDetail['id'] }}">
         </div>
     </div>
 </body>
