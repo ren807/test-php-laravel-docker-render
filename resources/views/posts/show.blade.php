@@ -144,6 +144,33 @@
         .stars input[type='radio']:checked ~ label {
             color: #F8C601;
         }
+        .slick-slider div {
+            text-align: center; /* スライドの中身を中央揃え */
+        }
+        .slick-slider img {
+            display: block;
+            margin: 0 auto;
+            width: auto; /* 幅を自動調整 */
+            max-width: 100%; /* コンテナの幅を超えないように */
+            height: auto; /* 高さを自動調整 */
+            max-height: 300px; /* 最大高さを300pxに制限 */
+            object-fit: contain; /* 縦横比を維持して画像を表示 */
+            border-radius: 8px;
+        }
+        .slick-prev, .slick-next {
+            font-size: 0; /* デフォルトのテキストを非表示 */
+            width: 40px;
+            height: 40px;
+            z-index: 1000;
+        }
+        .slick-prev::before, .slick-next::before {
+            font-size: 30px;
+            color: #007bff; /* 矢印の色を変更 */
+            opacity: 1; /* デフォルトで見えるように */
+        }
+        .slick-prev:hover::before, .slick-next:hover::before {
+            color: #0056b3; /* ホバー時に色を少し濃く */
+        }
     </style>
     <script>
         function confirmDelete(event) {
