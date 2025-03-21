@@ -99,6 +99,7 @@ class PostService
         $sql .= '       ON posts.id = ratings.post_id'.PHP_EOL;
         $sql .= '   LEFT JOIN images'.PHP_EOL;
         $sql .= '       ON posts.id = images.post_id'.PHP_EOL;
+        $sql .= 'WHERE deleted_flg != true'.PHP_EOL;
         $sql .= 'GROUP BY posts.id, posts.shopname, posts.tags, posts.deleted_flg'.PHP_EOL;
         $sql .= 'ORDER BY avg_rating DESC'.PHP_EOL;
 
