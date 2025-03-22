@@ -147,6 +147,18 @@ class PostController extends Controller
         }
     }
 
+    public function destroy(Request $request)
+    {
+        $id = $request->input('id');
+
+        DB::transaction(function() use ($id) {
+            // 対象の投稿を論理削除
+            $this->post->softDelete($id);
+        });
+
+        return redirect('/');
+    }
+
     public function eval()
     {
         $postId = request()->post('postId');

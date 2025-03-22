@@ -316,4 +316,17 @@ class PostService
 
         DB::update($sql, $params);
     }
+
+    public function softDelete(int $id)
+    {
+        $sql  = 'UPDATE posts SET deleted_flg = :deleted_flg'.PHP_EOL;
+        $sql .= 'WHERE posts.id = :postId'.PHP_EOL;
+
+        $params = [
+            'deleted_flg' => true,
+            'postId'      => $id,
+        ];
+
+        DB::update($sql, $params);
+    }
 }

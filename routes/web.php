@@ -26,6 +26,6 @@ Route::post('/store', [PostController::class, 'store'])->name('store');
 Route::get('/show/{id}', [PostController::class, 'show'])->name('show');
 Route::get('/edit/{id}', [PostController::class, 'edit'])->name('edit');
 Route::put('/update', [PostController::class, 'update'])->name('update');
-Route::delete('/delete', [PostController::class, 'delete'])->name('delete');
+Route::delete('/delete', [PostController::class, 'destroy'])->name('delete');
 
 Route::post('/ajax/eval',[PostController::class, 'eval'])->name('ajax/eval');
