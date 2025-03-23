@@ -319,7 +319,7 @@ class PostService
 
     public function softDelete(int $id)
     {
-        $sql  = 'UPDATE posts SET deleted_flg = :deleted_flg'.PHP_EOL;
+        $sql  = 'UPDATE posts SET deleted_flg = :deleted_flg, , updated_at = NOW()'.PHP_EOL;
         $sql .= 'WHERE posts.id = :postId'.PHP_EOL;
 
         $params = [
