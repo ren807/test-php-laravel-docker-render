@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Services\PostService;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {
@@ -69,16 +71,20 @@ class PostController extends Controller
         // 登録完了画面に遷移
         if (!empty($inputData["complete"]) && $inputData["complete"] === self::STORE_COMPLETE) {
 
-            DB::transaction(function () use ($inputData) {
-                // postsテーブルに登録
-                $this->post->insertPosts($inputData['shopname'], $inputData['tags']);
-        
-                // postsテーブルに登録したデータのidを取得
-                $maxId = $this->post->getShopByMaxId();
-        
-                // posts_detailテーブルに登録
-                $this->post->insertPostDetail($inputData['address'], $maxId['shopid']);
-            });
+            try {
+                DB::transaction(function () use ($inputData) {
+                    // postsテーブルに登録
+                    $this->post->insertPosts($inputData['shopname'], $inputData['tags']);
+            
+                    // postsテーブルに登録したデータのidを取得
+                    $maxId = $this->post->getShopByMaxId();
+            
+                    // posts_detailテーブルに登録
+                    $this->post->insertPostDetail($inputData['address'], $maxId['shopid']);
+                });
+            } catch(Exception $e) {
+                Log::error('データ保存エラー: ' . $e->getMessage());
+            }
 
             return View('posts.create-complete');
         }
