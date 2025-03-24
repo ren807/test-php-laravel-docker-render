@@ -18,7 +18,7 @@ php artisan migrate --force
 
 #DBを破壊する
 echo "Running migrate"
-php artisan db:fresh
+php artisan migrate:fresh --force
 
 # 強制的にseederを流す
 echo "Running seeder"
