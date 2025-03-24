@@ -38,6 +38,22 @@
             margin: 0 auto;
         }
 
+        .create-shop-content {
+            text-align: center; 
+            margin-bottom: 20px;
+        }
+
+        .create-shop-content a {
+            display: inline-block;
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
         .post {
             display: flex;
             align-items: center;
@@ -120,20 +136,27 @@
 <body>
     <div class="container">
         <h1>投稿一覧</h1>
-        @foreach ($posts['shopData'] as $post)
+        <div class="create-shop-content">
+            <a href="{{ route('create') }}">
+                ＋ 新しい店舗を追加
+            </a>
+        </div>
+        @foreach ($shopData as $post)
             <div class="post">
-                @if($post->image_url)
-                    <img src="{{ $post->image_url }}" alt="画像">
+                @if(!is_null($post['image_url']))
+                    <div><img src="{{ $post['image_url'] }}" alt="画像"></div>
+                @elseif(is_null($post['image_url']))
+                    <div><img src="https://picsum.photos/200/300" alt="画像"></div>
                 @endif
                 <div class="post-content">
-                    <h2><a href="{{ route('show', ['id' => $post->id]) }}">{{ $post->shopname }}</a></h2>
-                    <p>評価: <strong>{{ number_format($post->avg_rating, 1) }}</strong> ⭐</p>
+                    <h2><a href="{{ route('show', ['id' => $post['id']]) }}">{{ $post['shopname'] }}</a></h2>
+                    <p>評価: <strong>{{ number_format($post['avg_rating'], 1) }}</strong> ⭐</p>
 
                     <!-- タグ表示 -->
-                    @if (!empty($post->tags))
+                    @if (!empty($post['tags']))
                         <div class="tags">
-                            @foreach ($post->tags as $tag)
-                                <span class="tag">{{ $tag->name }}</span>
+                            @foreach ($post['tags'] as $tag)
+                                <span class="tag">{{ $tag['name'] }}</span>
                             @endforeach
                         </div>
                     @endif
@@ -146,8 +169,8 @@
 
         <!-- ページネーション -->
         <div class="pagination">
-            @for ($i = 1; $i <= $posts['pagerInfo']['maxPage']; $i++)
-                @if ($i == $posts['pagerInfo']['nowPage'])
+            @for ($i = 1; $i <= $pagerInfo['maxPage']; $i++)
+                @if ($i == $pagerInfo['nowPage'])
                     <span class="active">{{ $i }}</span>
                 @else
                     <a href="?page_id={{ $i }}">{{ $i }}</a>
