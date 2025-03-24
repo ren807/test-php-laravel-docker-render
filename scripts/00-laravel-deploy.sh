@@ -16,9 +16,10 @@ php artisan route:cache
 echo "Running migrations..."
 php artisan migrate --force
 
-# タグのseederを流す
-echo "Running seeder tags"
+# 強制的にseederを流す
+echo "Running seeder"
 php artisan db:seed --class=TagSeeder --force
+php artisan db:seed --class=UserSeeder --force
 
 # npm依存関係インストール
 echo "Installing npm dependencies..."
