@@ -18,7 +18,7 @@ php artisan migrate --force
 
 # タグのseederを流す
 echo "Running seeder tags"
-php artisan db:seed --class=TagSeeder
+php artisan db:seed --class=TagSeeder --force
 
 # npm依存関係インストール
 echo "Installing npm dependencies..."
