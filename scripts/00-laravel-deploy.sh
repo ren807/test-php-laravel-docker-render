@@ -16,6 +16,10 @@ php artisan route:cache
 echo "Running migrations..."
 php artisan migrate --force
 
+#DBを破壊する
+echo "Running migrate"
+php artisan db:fresh
+
 # 強制的にseederを流す
 echo "Running seeder"
 php artisan db:seed --class=TagSeeder --force
