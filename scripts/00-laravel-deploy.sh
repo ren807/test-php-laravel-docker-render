@@ -13,12 +13,8 @@ echo "Caching routes..."
 php artisan route:cache
 
 # マイグレーション実行
-# echo "Running migrations..."
-# php artisan migrate --force
-
-# DBをフレッシュする
 echo "Running migrations..."
-php artisan migrate:fresh --force
+php artisan migrate --force
 
 # タグのseederを流す
 echo "Running seeder tags"
