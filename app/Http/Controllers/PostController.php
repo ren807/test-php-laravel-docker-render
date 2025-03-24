@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 class PostController extends Controller
 {
     private $post;
-    private $userId = 4;
+    private $userId = 1;
 
     private $formMode;
 
