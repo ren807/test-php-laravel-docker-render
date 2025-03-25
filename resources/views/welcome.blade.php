@@ -10,6 +10,8 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+
         <!-- Styles -->
         <style>
             html, body {
@@ -96,6 +98,5 @@
                 </div>
             </div>
         </div>
-        <script src="{{ mix('/js/app.js') }}"></script>
     </body>
 </html>
