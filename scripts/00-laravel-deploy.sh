@@ -27,7 +27,6 @@ php artisan db:seed --class=UserSeeder --force
 
 # npm依存関係インストール
 echo "Installing npm dependencies..."
-cd /var/www/html
 npm i
 
 # ビルドを実行
