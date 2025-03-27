@@ -29,3 +29,7 @@ php artisan db:seed --class=UserSeeder --force
 echo "Installing npm dependencies..."
 cd /var/www/html
 npm i
+
+# ビルドを実行
+echo "Starting Vite build..."
+npm run build
