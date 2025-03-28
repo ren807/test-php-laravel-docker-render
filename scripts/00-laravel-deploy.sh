@@ -4,13 +4,12 @@
 echo "Running composer"
 composer install --no-dev --working-dir=/var/www/html
 
-# Laravelの設定キャッシュ
-echo "Caching config..."
+# Laravelのキャッシュをクリア
+echo "Caching clear..."
 php artisan config:cache
-
-# Laravelのルートキャッシュ
-echo "Caching routes..."
 php artisan route:cache
+php artisan view:clear
+php artisan route:clear
 
 # マイグレーション実行
 echo "Running migrations..."
