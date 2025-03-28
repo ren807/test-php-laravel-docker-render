@@ -18,16 +18,10 @@ ENV LOG_CHANNEL stderr
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
 # 必要なパッケージのインストール
-RUN apk update && apk add --no-cache bash curl
+RUN apk update && apk add --no-cache bash curl npm
 
-# Node.jsのインストール (バイナリ版)
-RUN curl -fsSL https://nodejs.org/dist/v22.14.0/node-v22.14.0-linux-x64.tar.xz -o /tmp/node.tar.xz && \
-    mkdir -p /usr/local/node && \
-    tar -xJf /tmp/node.tar.xz -C /usr/local/node --strip-components=1 && \
-    rm /tmp/node.tar.xz
-
-# Node.jsのパスを環境変数に追加
-ENV PATH="/usr/local/node/bin:$PATH"
+# Node.jsのインストール
+RUN apk add --no-cache nodejs
 
 # Node.jsの動作確認
 RUN node -v && npm -v
