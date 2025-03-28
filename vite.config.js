@@ -11,7 +11,4 @@ export default defineConfig({
         }),
         react(),
     ],
-    build: {
-        assetsDir: 'build',
-    },
 });
