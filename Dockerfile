@@ -24,12 +24,12 @@ RUN apk update && apk add --no-cache bash curl npm
 RUN apk add --no-cache nodejs
 
 # Node.jsの動作確認
-RUN node -v && npm -v
+RUN node -v
 
-# 必要な依存関係のインストール
-RUN npm install
+# # 必要な依存関係のインストール
+# RUN npm install
 
-# フロントエンドのビルド
-RUN npm run build
+# # フロントエンドのビルド
+# RUN npm run build
 
 CMD ["/start.sh"]
