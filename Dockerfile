@@ -25,10 +25,10 @@ RUN curl -fsSL https://nodejs.org/dist/v22.14.0/node-v22.14.0-linux-x64.tar.xz -
 tar -xJf /tmp/node-v22.14.0-linux-x64.tar.xz -C /usr/local --strip-components=1 && \
 rm /tmp/node-v22.14.0-linux-x64.tar.xz
 
-RUN node -v && npm -v
-
 # Node.jsのバイナリがパスに含まれていることを確認
 ENV PATH=/usr/local/bin:$PATH
+
+RUN node -v && npm -v
 
 # 必要な依存関係のインストール
 RUN npm install
