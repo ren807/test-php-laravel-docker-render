@@ -3,13 +3,14 @@ import PrimaryButton from 'resources/ts/Components/PrimaryButton';
 import TextInput from 'resources/ts/Components/TextInput';
 import GuestLayout from 'resources/ts/Layouts/GuestLayout';
 import { Head, useForm } from '@inertiajs/react';
+import { route } from "ziggy-js";
 
 export default function ForgotPassword({ status }) {
     const { data, setData, post, processing, errors } = useForm({
         email: '',
     });
 
-    const submit = (e) => {
+    const submit = (e: any) => {
         e.preventDefault();
 
         post(route('password.email'));

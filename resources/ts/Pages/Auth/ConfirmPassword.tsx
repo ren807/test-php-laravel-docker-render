@@ -4,6 +4,7 @@ import PrimaryButton from 'resources/ts/Components/PrimaryButton';
 import TextInput from 'resources/ts/Components/TextInput';
 import GuestLayout from 'resources/ts/Layouts/GuestLayout';
 import { Head, useForm } from '@inertiajs/react';
+import { route } from "ziggy-js";
 
 export default function ConfirmPassword() {
     const { data, setData, post, processing, errors, reset } = useForm({

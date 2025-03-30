@@ -4,6 +4,7 @@ import PrimaryButton from 'resources/ts/Components/PrimaryButton';
 import TextInput from 'resources/ts/Components/TextInput';
 import GuestLayout from 'resources/ts/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
+import { route } from "ziggy-js";
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -13,7 +14,7 @@ export default function Register() {
         password_confirmation: '',
     });
 
-    const submit = (e) => {
+    const submit = (e: any) => {
         e.preventDefault();
 
         post(route('register'), {
